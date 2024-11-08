@@ -8,13 +8,23 @@ import { Button } from '../components/ui/button';
 const HomePage = () => {
   const [idCardImage, setIdCardImage] = useState(null);
   const [faceImage, setFaceImage] = useState(null);
+  const [employeeName, setEmployeeName] = useState('');
   const [result, setResult] = useState(null);
+
+  const handleIDCardCapture = (image, name) => {
+    setIdCardImage(image);
+    setEmployeeName(name);
+  };
 
   const handleVerification = async () => {
     setResult('Đang xử lý...');
     try {
       const isMatch = await compareFaces(idCardImage, faceImage);
-      setResult(isMatch ? 'Khuôn mặt khớp nhau. Điểm danh thành công!' : 'Khuôn mặt không khớp. Vui lòng thử lại.');
+      setResult(
+        isMatch
+          ? `Khuôn mặt khớp nhau. Điểm danh thành công cho ${employeeName}!`
+          : 'Khuôn mặt không khớp. Vui lòng thử lại.'
+      );
     } catch (error) {
       console.error(error);
       setResult('Đã xảy ra lỗi trong quá trình so sánh khuôn mặt.');
@@ -24,14 +34,15 @@ const HomePage = () => {
   const resetProcess = () => {
     setIdCardImage(null);
     setFaceImage(null);
+    setEmployeeName('');
     setResult(null);
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h1>Ứng dụng điểm danh nhân viên</h1>
+    <div className='text-center gap-4'>
+      <h1 className='m-8'>Ứng dụng điểm danh nhân viên</h1>
       {!idCardImage ? (
-        <IDCardCapture onCapture={setIdCardImage} />
+        <IDCardCapture onCapture={handleIDCardCapture} />
       ) : !faceImage ? (
         <FaceCapture onCapture={setFaceImage} />
       ) : (

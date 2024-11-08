@@ -15,17 +15,13 @@ const IDCardCapture = ({ onCapture }) => {
 
     try {
       // Thực hiện OCR
-      const { data: { text } } = await Tesseract.recognize(
-        imageSrc,
-        'eng',
-        {
-          logger: m => console.log(m), // Theo dõi tiến trình OCR
-        }
-      );
+      const { data: { text } } = await Tesseract.recognize(imageSrc, 'vie', {
+        logger: (m) => console.log(m), 
+      });
 
-      console.log('Text recognized:', text);
+      console.log('OCR Text:', text);
 
-      // Xử lý văn bản để lấy tên nhân viên
+      // Trích xuất tên từ kết quả OCR
       const extractedName = extractNameFromText(text);
       setName(extractedName);
 
@@ -41,17 +37,18 @@ const IDCardCapture = ({ onCapture }) => {
 
   // Hàm để xử lý văn bản và lấy tên nhân viên
   const extractNameFromText = (text) => {
-    // Giả sử tên nhân viên nằm trên dòng có từ "Name" hoặc "Tên"
-    const lines = text.split('\n');
-    for (let line of lines) {
-      if (line.toLowerCase().includes('name') || line.toLowerCase().includes('tên')) {
-        // Lấy phần sau từ "Name" hoặc "Tên"
-        const nameLine = line.split(':')[1] || line.split(' ')[1] || line;
-        return nameLine.trim();
+    const lines = text.split('\n').map((line) => line.trim()).filter((line) => line);
+    console.log('Lines:', lines);
+
+    // Tìm dòng có từ "NHÂN VIÊN" hoặc dòng trên nó
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].toUpperCase().includes('NHÂN VIÊN')) {
+        return lines[i - 1] || ''; // Lấy dòng phía trên
       }
     }
+
     // Nếu không tìm thấy, trả về dòng đầu tiên
-    return text;
+    return lines.length > 0 ? lines[0] : '';
   };
 
   const videoConstraints = {
@@ -62,7 +59,7 @@ const IDCardCapture = ({ onCapture }) => {
 
   return (
     <div>
-      <h2 className='m-4'>Chụp ảnh thẻ nhân viên</h2>
+      <h2 className='m-8'>Chụp ảnh thẻ nhân viên</h2>
       <Webcam
         audio={false}
         ref={webcamRef}

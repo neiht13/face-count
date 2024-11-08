@@ -14,18 +14,14 @@ const IDCardCapture = ({ onCapture }) => {
     const imageSrc = webcamRef.current.getScreenshot();
 
     try {
-      const worker = Tesseract.createWorker({
-        logger: m => console.log(m), // Theo dõi tiến trình OCR
-        langPath: '/tesseract-lang', // Đường dẫn tới thư mục chứa tệp ngôn ngữ
-      });
-
-      await worker.load();
-      await worker.loadLanguage('vie');
-      await worker.initialize('vie');
-
-      const { data: { text } } = await worker.recognize(imageSrc);
-
-      await worker.terminate();
+      // Thực hiện OCR
+      const { data: { text } } = await Tesseract.recognize(
+        imageSrc,
+        'eng',
+        {
+          logger: m => console.log(m), // Theo dõi tiến trình OCR
+        }
+      );
 
       console.log('Text recognized:', text);
 
@@ -40,7 +36,7 @@ const IDCardCapture = ({ onCapture }) => {
       alert('Không thể trích xuất tên từ thẻ. Vui lòng thử lại.');
     } finally {
       setIsProcessing(false);
-    }12
+    }
   };
 
   // Hàm để xử lý văn bản và lấy tên nhân viên
@@ -48,8 +44,6 @@ const IDCardCapture = ({ onCapture }) => {
     // Giả sử tên nhân viên nằm trên dòng có từ "Name" hoặc "Tên"
     const lines = text.split('\n');
     for (let line of lines) {
-      console.log('line ', line );
-      
       if (line.toLowerCase().includes('name') || line.toLowerCase().includes('tên')) {
         // Lấy phần sau từ "Name" hoặc "Tên"
         const nameLine = line.split(':')[1] || line.split(' ')[1] || line;

@@ -40,16 +40,17 @@ const HomePage = () => {
 
   return (
     <div className='text-center gap-4'>
-      <h1 className='m-8'>Ứng dụng điểm danh nhân viên</h1>
+      <h1 className='m-4'>Ứng dụng điểm danh nhân viên</h1>
+      {employeeName && <p>Tên nhân viên: {employeeName}</p>}
       {!idCardImage ? (
         <IDCardCapture onCapture={handleIDCardCapture} />
       ) : !faceImage ? (
         <FaceCapture onCapture={setFaceImage} />
       ) : (
         <div>
-          <Button onClick={handleVerification}>Xác minh khuôn mặt</Button>
+          <Button  className='m-4' onClick={handleVerification}>Xác minh khuôn mặt</Button>
           {result && <p>{result}</p>}
-          <Button onClick={resetProcess}>Thử lại</Button>
+          <Button  className='m-4' onClick={resetProcess}>Thử lại</Button>
         </div>
       )}
     </div>

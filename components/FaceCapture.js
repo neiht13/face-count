@@ -13,7 +13,7 @@ const FaceCapture = ({ onCapture }) => {
 
   return (
     <div>
-      <h2 className='m-8' >Chụp ảnh khuôn mặt hiện tại</h2>
+      <h2  className='m-4' >Chụp ảnh khuôn mặt hiện tại</h2>
       <Webcam
         audio={false}
         ref={webcamRef}

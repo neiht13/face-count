@@ -51,7 +51,7 @@ const IDCardCapture = ({ onCapture }) => {
       }
     }
     // Nếu không tìm thấy, trả về dòng đầu tiên
-    return lines[0].trim();
+    return text;
   };
 
   const videoConstraints = {
@@ -62,7 +62,7 @@ const IDCardCapture = ({ onCapture }) => {
 
   return (
     <div>
-      <h2 className='m-8'>Chụp ảnh thẻ nhân viên</h2>
+      <h2 className='m-4'>Chụp ảnh thẻ nhân viên</h2>
       <Webcam
         audio={false}
         ref={webcamRef}

@@ -11,6 +11,12 @@ const IDCardCapture = ({ onCapture }) => {
     onCapture(imageSrc);
   };
 
+  const videoConstraints = {
+    width: 400,
+    height: 300,
+    facingMode:'environment',
+  };
+
   return (
     <div>
       <h2>Chụp ảnh thẻ nhân viên</h2>
@@ -18,6 +24,7 @@ const IDCardCapture = ({ onCapture }) => {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
+        videoConstraints={videoConstraints}
         width={400}
       />
       <Button onClick={captureIDCard}>Chụp ảnh thẻ</Button>
